@@ -1,0 +1,26 @@
+weather,road_type,avg_severity,incident_count,fatality_rate_pct
+Clear,Highway,3.26,579,4.99
+Clear,Urban Street,3.93,87,7.84
+Clear,Residential,2.59,284,1.17
+Clear,Industrial Zone,4.25,144,5.12
+Clear,Coastal Road,3.16,306,1.09
+Sandstorm,Highway,5.5,513,1.62
+Sandstorm,Urban Street,3.12,496,2.59
+Sandstorm,Residential,5.45,284,3.57
+Sandstorm,Industrial Zone,3.2,118,2.24
+Sandstorm,Coastal Road,2.98,103,4.79
+Fog,Highway,5.05,230,2.66
+Fog,Urban Street,4.11,483,7.21
+Fog,Residential,3.41,250,5.02
+Fog,Industrial Zone,2.93,153,2.52
+Fog,Coastal Road,5.05,596,1.43
+Rain,Highway,2.89,427,5.92
+Rain,Urban Street,1.96,241,2.34
+Rain,Residential,1.53,225,6.25
+Rain,Industrial Zone,3.04,71,4.26
+Rain,Coastal Road,4.18,453,1.51
+Heatwave,Highway,1.65,209,6.85
+Heatwave,Urban Street,2.23,673,6.76
+Heatwave,Residential,3.22,335,3.97
+Heatwave,Industrial Zone,2.86,777,1.32
+Heatwave,Coastal Road,2.24,705,5.05

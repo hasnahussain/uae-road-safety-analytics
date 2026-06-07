@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UAE Road Safety Analytics | 2019–2024</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root {
+    --bg: #0D1117;
+    --surface: #161B22;
+    --surface2: #1C2128;
+    --border: #30363D;
+    --accent1: #58A6FF;
+    --accent2: #F78166;
+    --accent3: #3FB950;
+    --accent4: #D2A8FF;
+    --accent5: #FFA657;
+    --text: #E6EDF3;
+    --muted: #8B949E;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Space Grotesk', sans-serif;
+    min-height: 100vh;
+  }
+
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, #0D1117 0%, #161B22 50%, #0D1B2A 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 40px 60px 36px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(88,166,255,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(88,166,255,0.1);
+    border: 1px solid rgba(88,166,255,0.25);
+    border-radius: 20px;
+    padding: 4px 14px;
+    font-size: 12px;
+    color: var(--accent1);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .header h1 {
+    font-size: 34px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+  .header h1 span { color: var(--accent1); }
+  .header p {
+    color: var(--muted);
+    font-size: 15px;
+    max-width: 600px;
+    line-height: 1.6;
+  }
+  .header-meta {
+    display: flex;
+    gap: 24px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+  }
+  .header-meta span {
+    font-size: 12px;
+    color: var(--muted);
+    font-family: 'JetBrains Mono', monospace;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .header-meta span::before {
+    content: '';
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent3);
+  }
+
+  /* KPI Strip */
+  .kpi-strip {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .kpi-card {
+    background: var(--surface);
+    padding: 24px 28px;
+    transition: background 0.2s;
+  }
+  .kpi-card:hover { background: var(--surface2); }
+  .kpi-value {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .kpi-label {
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .kpi-sub {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 4px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* Main */
+  .main { padding: 40px 60px; }
+
+  /* Section header */
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+    margin-top: 48px;
+  }
+  .section-header:first-child { margin-top: 0; }
+  .section-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 3px 9px;
+    border-radius: 4px;
+  }
+  .section-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .section-divider {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* Chart cards */
+  .chart-full {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+  .chart-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .chart-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .chart-tag {
+    font-size: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    padding: 2px 8px;
+    border-radius: 4px;
+    border: 1px solid;
+  }
+  .tag-eda { color: var(--accent1); border-color: rgba(88,166,255,0.3); background: rgba(88,166,255,0.08); }
+  .tag-ml  { color: var(--accent4); border-color: rgba(210,168,255,0.3); background: rgba(210,168,255,0.08); }
+  .tag-clust { color: var(--accent3); border-color: rgba(63,185,80,0.3); background: rgba(63,185,80,0.08); }
+  .chart-img {
+    width: 100%;
+    display: block;
+  }
+
+  .chart-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  /* Insight cards */
+  .insight-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-top: 32px;
+  }
+  .insight-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  .insight-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+  .insight-card.danger::before { background: var(--accent2); }
+  .insight-card.success::before { background: var(--accent3); }
+  .insight-card.info::before { background: var(--accent1); }
+  .insight-card.warning::before { background: var(--accent5); }
+  .insight-card.ml::before { background: var(--accent4); }
+  .insight-card.cluster::before { background: #56D364; }
+  .insight-icon { font-size: 24px; margin-bottom: 10px; }
+  .insight-title {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .insight-body {
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.5;
+  }
+  .insight-stat {
+    font-size: 22px;
+    font-weight: 700;
+    margin-top: 8px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* Tech stack */
+  .tech-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 32px;
+  }
+  .tech-pill {
+    font-size: 11px;
+    font-family: 'JetBrains Mono', monospace;
+    padding: 5px 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    color: var(--muted);
+  }
+  .tech-pill.highlight { color: var(--accent1); border-color: rgba(88,166,255,0.3); }
+
+  /* Footer */
+  .footer {
+    border-top: 1px solid var(--border);
+    padding: 28px 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--muted);
+    font-size: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    margin-top: 60px;
+  }
+
+  @media (max-width: 900px) {
+    .header, .main, .footer { padding: 24px; }
+    .kpi-strip { grid-template-columns: repeat(2, 1fr); }
+    .chart-grid-2, .insight-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-badge">🇦🇪 Data Science Portfolio</div>
+  <h1>UAE Road Safety &amp; Incident <span>Analytics</span></h1>
+  <p>A comprehensive data science study of road incident patterns, weather impacts, emirate-level safety performance, and ML-driven severity prediction across the UAE from 2019 to 2024.</p>
+  <div class="header-meta">
+    <span>5,000 Incident Records</span>
+    <span>7 Emirates</span>
+    <span>2019 – 2024</span>
+    <span>Random Forest + K-Means</span>
+    <span>Python • Pandas • Scikit-learn</span>
+  </div>
+</header>
+
+<div class="kpi-strip">
+  <div class="kpi-card">
+    <div class="kpi-value" style="color:#58A6FF">5,000</div>
+    <div class="kpi-label">Total Incidents</div>
+    <div class="kpi-sub">2019 – 2024</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-value" style="color:#F78166">722</div>
+    <div class="kpi-label">Total Fatalities</div>
+    <div class="kpi-sub">14.4% of incidents</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-value" style="color:#FFA657">3.23</div>
+    <div class="kpi-label">Avg Severity Score</div>
+    <div class="kpi-sub">Scale: 1 – 5</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-value" style="color:#3FB950">44.5%</div>
+    <div class="kpi-label">ML Model Accuracy</div>
+    <div class="kpi-sub">5-Fold CV Score</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-value" style="color:#D2A8FF">4</div>
+    <div class="kpi-label">Risk Clusters</div>
+    <div class="kpi-sub">K-Means Profiles</div>
+  </div>
+</div>
+
+<main class="main">
+
+  <!-- Section 1 -->
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <h2 class="section-title">Executive Overview</h2>
+    <div class="section-divider"></div>
+    <span class="chart-tag tag-eda">EDA</span>
+  </div>
+  <div class="chart-full">
+    <div class="chart-header">
+      <span class="chart-title">Annual Trends, Incident Distribution, Emirate Breakdown &amp; Severity Heatmap</span>
+    </div>
+    <img src="reports/01_executive_dashboard.png" class="chart-img" alt="Executive Dashboard">
+  </div>
+
+  <!-- Section 2 -->
+  <div class="section-header">
+    <span class="section-num">02</span>
+    <h2 class="section-title">Weather &amp; Environmental Impact</h2>
+    <div class="section-divider"></div>
+    <span class="chart-tag tag-eda">EDA</span>
+  </div>
+  <div class="chart-full">
+    <div class="chart-header">
+      <span class="chart-title">Weather Severity, Monthly-Weather Heatmap, Road Type × Weather Matrix</span>
+    </div>
+    <img src="reports/02_weather_impact_analysis.png" class="chart-img" alt="Weather Impact">
+  </div>
+
+  <!-- Section 3 -->
+  <div class="section-header">
+    <span class="section-num">03</span>
+    <h2 class="section-title">Machine Learning: Severity Prediction</h2>
+    <div class="section-divider"></div>
+    <span class="chart-tag tag-ml">ML</span>
+  </div>
+  <div class="chart-full">
+    <div class="chart-header">
+      <span class="chart-title">Random Forest Classifier — Feature Importance, Confusion Matrix, Cross-Validation</span>
+    </div>
+    <img src="reports/03_ml_severity_prediction.png" class="chart-img" alt="ML Severity Prediction">
+  </div>
+
+  <!-- Section 4 + 5 side by side -->
+  <div class="section-header">
+    <span class="section-num">04 &amp; 05</span>
+    <h2 class="section-title">Emirate Safety Index &amp; Temporal Patterns</h2>
+    <div class="section-divider"></div>
+    <span class="chart-tag tag-eda">EDA</span>
+  </div>
+  <div class="chart-grid-2">
+    <div class="chart-full" style="margin-bottom:0">
+      <div class="chart-header">
+        <span class="chart-title">Safety Index, Response Time &amp; CCTV Correlation</span>
+      </div>
+      <img src="reports/04_emirate_safety_index.png" class="chart-img" alt="Emirate Safety">
+    </div>
+    <div class="chart-full" style="margin-bottom:0">
+      <div class="chart-header">
+        <span class="chart-title">Hourly Distribution, Monthly Fatality Rate, YoY Comparison</span>
+      </div>
+      <img src="reports/05_temporal_patterns.png" class="chart-img" alt="Temporal Patterns">
+    </div>
+  </div>
+
+  <!-- Section 6 -->
+  <div class="section-header" style="margin-top:32px">
+    <span class="section-num">06</span>
+    <h2 class="section-title">K-Means Risk Profiling</h2>
+    <div class="section-divider"></div>
+    <span class="chart-tag tag-clust">CLUSTERING</span>
+  </div>
+  <div class="chart-full">
+    <div class="chart-header">
+      <span class="chart-title">4 Risk Clusters — Hour vs Severity, Profiles, Emirate Distribution, Time of Day</span>
+    </div>
+    <img src="reports/06_risk_clustering.png" class="chart-img" alt="Risk Clustering">
+  </div>
+
+  <!-- Key Insights -->
+  <div class="section-header">
+    <span class="section-num">INSIGHTS</span>
+    <h2 class="section-title">Key Findings</h2>
+    <div class="section-divider"></div>
+  </div>
+
+  <div class="insight-grid">
+    <div class="insight-card danger">
+      <div class="insight-icon">🌪️</div>
+      <div class="insight-title">Most Dangerous Weather</div>
+      <div class="insight-body">Sandstorm conditions produce the highest average severity scores, especially on highways and coastal roads.</div>
+      <div class="insight-stat" style="color:#F78166">Sandstorm</div>
+    </div>
+    <div class="insight-card warning">
+      <div class="insight-icon">🌙</div>
+      <div class="insight-title">Highest-Risk Time</div>
+      <div class="insight-body">Early morning hours (0–6 AM) show the highest severity scores, likely due to fatigue and reduced visibility.</div>
+      <div class="insight-stat" style="color:#FFA657">00:00–06:00</div>
+    </div>
+    <div class="insight-card success">
+      <div class="insight-icon">📈</div>
+      <div class="insight-title">Safety Improving</div>
+      <div class="insight-body">All emirates show an upward safety index trend over the study period, with Abu Dhabi leading at 85+ score.</div>
+      <div class="insight-stat" style="color:#3FB950">+1.2/yr avg</div>
+    </div>
+    <div class="insight-card ml">
+      <div class="insight-icon">🤖</div>
+      <div class="insight-title">ML Model</div>
+      <div class="insight-body">Random Forest achieves 44.5% CV accuracy on 5-class severity prediction. Top features: injuries, response time, hour.</div>
+      <div class="insight-stat" style="color:#D2A8FF">RF Classifier</div>
+    </div>
+    <div class="insight-card cluster">
+      <div class="insight-icon">🔵</div>
+      <div class="insight-title">Risk Clustering</div>
+      <div class="insight-body">K-Means identifies 4 distinct incident profiles — from low-severity traffic violations to fatal high-speed collisions.</div>
+      <div class="insight-stat" style="color:#56D364">4 Profiles</div>
+    </div>
+    <div class="insight-card info">
+      <div class="insight-icon">📡</div>
+      <div class="insight-title">CCTV Correlation</div>
+      <div class="insight-body">Higher CCTV density correlates positively with safety index scores (r≈0.6), suggesting infrastructure impact on safety.</div>
+      <div class="insight-stat" style="color:#58A6FF">r ≈ 0.60</div>
+    </div>
+  </div>
+
+  <!-- Tech Stack -->
+  <div class="section-header" style="margin-top:40px">
+    <span class="section-num">TECH</span>
+    <h2 class="section-title">Stack &amp; Methods</h2>
+    <div class="section-divider"></div>
+  </div>
+  <div class="tech-stack">
+    <span class="tech-pill highlight">Python 3.12</span>
+    <span class="tech-pill highlight">Pandas</span>
+    <span class="tech-pill highlight">NumPy</span>
+    <span class="tech-pill highlight">Scikit-learn</span>
+    <span class="tech-pill highlight">Matplotlib</span>
+    <span class="tech-pill highlight">Seaborn</span>
+    <span class="tech-pill">Random Forest Classifier</span>
+    <span class="tech-pill">K-Means Clustering</span>
+    <span class="tech-pill">Label Encoding</span>
+    <span class="tech-pill">Standard Scaler</span>
+    <span class="tech-pill">5-Fold Cross Validation</span>
+    <span class="tech-pill">Confusion Matrix</span>
+    <span class="tech-pill">Feature Importance</span>
+    <span class="tech-pill">Pearson Correlation</span>
+    <span class="tech-pill">Heatmaps</span>
+    <span class="tech-pill">Time Series Analysis</span>
+    <span class="tech-pill">Synthetic Data Generation</span>
+    <span class="tech-pill">HTML Dashboard</span>
+  </div>
+
+</main>
+
+<footer class="footer">
+  <span>🇦🇪 UAE Road Safety Analytics — Hasna Hussain</span>
+  <span>Data Science Portfolio Project | 2024</span>
+  <span>Python • Scikit-learn • Matplotlib</span>
+</footer>
+
+</body>
+</html>
