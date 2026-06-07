@@ -197,7 +197,7 @@ scipy>=1.11
 
 **Hasna Hussain (Hasu)**  
 MSc Data Science & AI — Middlesex University Dubai  
-📍 UAE | [LinkedIn](https://linkedin.com) | [GitHub](https://github.com)
+📍 UAE | [LinkedIn](https://www.linkedin.com/in/hasna-hussain-29a631221) | [GitHub](https://github.com/hasnahussain)
 
 ---
 
